@@ -42,4 +42,5 @@ class NeuralNetwork(nn.Module):
         )
 
         tensor /= 255.0  # Normalize to [0, 1]
+        tensor = 1 - tensor  # Invert colors (MNIST is white on black)
         return tensor

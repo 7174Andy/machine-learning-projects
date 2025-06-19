@@ -46,9 +46,7 @@ class PaintWidget(QWidget):
 
     def confirm(self):
         raw_image = self.get_image()
-        print(f"Raw image size: {raw_image.size()}")
         image = NeuralNetwork.prepare_image(raw_image)
-        print("Image confirmed for processing.")
         model = NeuralNetwork()
         model.load_state_dict(
             torch.load("mnist_model.pth", map_location=torch.device("cpu"))
@@ -56,7 +54,7 @@ class PaintWidget(QWidget):
         model.eval()
         with torch.no_grad():
             output = model(image)
-            _, predicted = torch.max(output.data, 1)
+            predicted = output.argmax(dim=1, keepdim=True)
             print(f"Predicted digit: {predicted.item()}")
 
     def get_image(self):
