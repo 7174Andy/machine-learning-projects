@@ -1,5 +1,8 @@
 import torch.nn as nn
+from PySide6.QtGui import QImage
 import torch
+import PIL.Image as Image
+import numpy as np
 
 
 class NeuralNetwork(nn.Module):
@@ -16,14 +19,27 @@ class NeuralNetwork(nn.Module):
         return x
 
     @staticmethod
-    def prepare_image(image):
+    def qimage_to_pil(qimage: QImage) -> Image.Image:
+        """
+        Converts a QImage to a PIL Image.
+        """
+        qimage = qimage.convertToFormat(QImage.Format_RGBA8888)
+        width, height = qimage.width(), qimage.height()
+        ptr = qimage.bits()
+        arr = np.array(ptr, dtype=np.uint8).reshape((height, width, 4))
+        return Image.fromarray(arr, mode="RGBA")
+
+    @staticmethod
+    def prepare_image(qimage: QImage) -> torch.Tensor:
         """
         Prepares the image for prediction by converting it to grayscale,
         resizing it to 28x28 pixels, and normalizing the pixel values.
         """
-        image = image.convert("L").resize((28, 28))
-        image = torch.tensor(list(image.getdata()), dtype=torch.float32).view(
+        pil_image = NeuralNetwork.qimage_to_pil(qimage).convert("L").resize((28, 28))
+
+        tensor = torch.tensor(list(pil_image.getdata()), dtype=torch.float32).view(
             1, 1, 28, 28
         )
-        image /= 255.0  # Normalize pixel values to [0, 1]
-        return image
+
+        tensor /= 255.0  # Normalize to [0, 1]
+        return tensor

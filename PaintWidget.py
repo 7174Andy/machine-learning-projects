@@ -2,6 +2,9 @@
 from PySide6.QtWidgets import QWidget
 from PySide6.QtGui import QPainter, QPaintEvent, QPen, QMouseEvent, QPixmap
 from PySide6.QtCore import Qt, QPoint
+from model import NeuralNetwork
+import torch
+import PIL.Image as Image
 
 
 class PaintWidget(QWidget):
@@ -40,6 +43,21 @@ class PaintWidget(QWidget):
     def clear(self):
         self.canvas.fill(Qt.white)
         self.update()
+
+    def confirm(self):
+        raw_image = self.get_image()
+        print(f"Raw image size: {raw_image.size()}")
+        image = NeuralNetwork.prepare_image(raw_image)
+        print("Image confirmed for processing.")
+        model = NeuralNetwork()
+        model.load_state_dict(
+            torch.load("mnist_model.pth", map_location=torch.device("cpu"))
+        )
+        model.eval()
+        with torch.no_grad():
+            output = model(image)
+            _, predicted = torch.max(output.data, 1)
+            print(f"Predicted digit: {predicted.item()}")
 
     def get_image(self):
         """

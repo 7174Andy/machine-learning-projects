@@ -19,9 +19,12 @@ if __name__ == "__main__":
     paint_widget = PaintWidget()
     clear_button = QPushButton("Clear")
     clear_button.clicked.connect(paint_widget.clear)
+    confirm_button = QPushButton("Confirm")
+    confirm_button.clicked.connect(paint_widget.confirm)
 
     layout = QVBoxLayout()
     layout.addWidget(paint_widget)
+    layout.addWidget(confirm_button)
     layout.addWidget(clear_button)
 
     container = QWidget()
