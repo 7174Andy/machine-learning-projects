@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch
 
 
 class NeuralNetwork(nn.Module):
@@ -13,3 +14,16 @@ class NeuralNetwork(nn.Module):
         x = self.layer1(x)
         x = self.layer2(x)
         return x
+
+    @staticmethod
+    def prepare_image(image):
+        """
+        Prepares the image for prediction by converting it to grayscale,
+        resizing it to 28x28 pixels, and normalizing the pixel values.
+        """
+        image = image.convert("L").resize((28, 28))
+        image = torch.tensor(list(image.getdata()), dtype=torch.float32).view(
+            1, 1, 28, 28
+        )
+        image /= 255.0  # Normalize pixel values to [0, 1]
+        return image
