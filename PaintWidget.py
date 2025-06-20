@@ -58,7 +58,8 @@ class PaintWidget(QWidget):
             print(f"Predicted digit: {predicted.item()}")
             confidence_output = torch.exp(output)
             confidence = confidence_output.max(dim=1).values.item()
-        print(f"Confidence: {confidence:.2f}")
+            print(f"Confidence: {confidence:.2f}")
+            return predicted.item(), confidence
 
     def get_image(self):
         """

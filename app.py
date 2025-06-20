@@ -6,9 +6,21 @@ from PySide6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QWidget,
+    QMessageBox,
 )
 
 from PaintWidget import PaintWidget  # Assuming PaintWidget is in the same directory
+
+
+def on_confirm():
+    result = paint_widget.confirm()
+    if result:
+        predicted_digit, confidence = result
+        result_label.setText(
+            f"Predicted digit: {predicted_digit}\nConfidence: {confidence:.2f}"
+        )
+        result_label.exec_()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -21,6 +33,9 @@ if __name__ == "__main__":
     clear_button.clicked.connect(paint_widget.clear)
     confirm_button = QPushButton("Confirm")
     confirm_button.clicked.connect(paint_widget.confirm)
+
+    result_label = QMessageBox()
+    confirm_button.clicked.connect(on_confirm)
 
     layout = QVBoxLayout()
     layout.addWidget(paint_widget)
