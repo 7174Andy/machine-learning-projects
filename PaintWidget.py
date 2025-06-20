@@ -4,7 +4,7 @@ from PySide6.QtGui import QPainter, QPaintEvent, QPen, QMouseEvent, QPixmap
 from PySide6.QtCore import Qt, QPoint
 from model import NeuralNetwork
 import torch
-import PIL.Image as Image
+from torchvision.transforms.functional import to_pil_image
 
 
 class PaintWidget(QWidget):
@@ -56,6 +56,9 @@ class PaintWidget(QWidget):
             output = model(image)
             predicted = output.argmax(dim=1, keepdim=True)
             print(f"Predicted digit: {predicted.item()}")
+            confidence_output = torch.exp(output)
+            confidence = confidence_output.max(dim=1).values.item()
+        print(f"Confidence: {confidence:.2f}")
 
     def get_image(self):
         """
