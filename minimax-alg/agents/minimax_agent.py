@@ -19,7 +19,7 @@ class MiniMaxAgent:
         alpha = -np.inf
         beta = np.inf
 
-        for col in legal:
+        for col in self._order_center_first(legal, env.width):
             child = env.clone()
             child.step(col)
             value = self.minimax(child, self.max_depth - 1, -np.inf, np.inf)
@@ -144,3 +144,8 @@ class MiniMaxAgent:
                 score += self._evaluate_window(window, piece, EMPTY, connect)
 
         return score
+
+    @staticmethod
+    def _order_center_first(moves, width):
+        c = width // 2
+        return sorted(moves, key=lambda m: abs(m - c))
