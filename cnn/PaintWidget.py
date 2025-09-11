@@ -2,7 +2,7 @@
 from PySide6.QtWidgets import QWidget
 from PySide6.QtGui import QPainter, QPaintEvent, QPen, QMouseEvent, QPixmap
 from PySide6.QtCore import Qt, QPoint
-from model import NeuralNetwork
+from cnn.model import NeuralNetwork
 import torch
 from torchvision.transforms.functional import to_pil_image
 

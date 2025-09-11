@@ -22,6 +22,7 @@ def on_confirm():
         result_label.exec_()
 
 
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
