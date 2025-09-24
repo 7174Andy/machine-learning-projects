@@ -24,7 +24,7 @@ class Node:
         self.untried_actions = deepcopy(actions)
         self.is_terminal = self.simulator.winner is not None
 
-RESOURCES = 1500
+RESOURCES = 1000
 
 class MCTS:
     """
@@ -99,7 +99,10 @@ class MCTS:
         while self.simulator.winner is None:
             possible_moves = self.simulator.get_moves()
 
-            action = random.choice(possible_moves) if possible_moves else None
+            if random.random() < 0.4:
+                action = self.tectical_move(self.simulator)
+            else:
+                action = random.choice(possible_moves) if possible_moves else None
             self.simulator.step(action)
         
         reward = {}
@@ -108,3 +111,29 @@ class MCTS:
         else:
             reward = {self.simulator.winner: 1, 1 - self.simulator.winner: 0}
         return reward
+
+    def tectical_move(self, sim: Connect4Env):
+        possible_moves = sim.get_moves()
+        
+        # Check if there are any immediate winning moves
+        if not possible_moves:
+            return None
+    
+        # play a immediate winning move if available
+        for move in possible_moves:
+            temp_sim = sim.clone()
+            temp_sim.step(move)
+            if temp_sim.winner == sim.current_player:
+                return move
+        
+        # Block opponent's immediate winning move if available
+        opponent = 1 - sim.current_player
+        for move in possible_moves:
+            temp_sim = sim.clone()
+            temp_sim.step(move)
+            if temp_sim.winner == opponent:
+                return move
+        
+        # Otherwise, center bias
+        order = sorted(possible_moves, key=lambda c: abs(c - (sim.width - 1)/2))
+        return order[0]
