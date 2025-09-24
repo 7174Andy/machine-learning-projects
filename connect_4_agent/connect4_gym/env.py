@@ -46,6 +46,7 @@ class Connect4Env(gymnasium.Env):
 
         self.state_space_size = (self.height * self.width) ** 3
 
+
         self.reset()
 
     def reset(self) -> List[np.ndarray]:
@@ -95,7 +96,7 @@ class Connect4Env(gymnasium.Env):
         # Checks if the move is valid
         if not (
             movecol >= 0
-            and movecol <= self.width
+            and movecol < self.width
             and self.board[movecol][self.height - 1] == -1
         ):
             raise IndexError(

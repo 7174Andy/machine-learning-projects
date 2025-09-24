@@ -22,9 +22,9 @@ class Node:
         self.parent = parent
         self.children = []
         self.untried_actions = deepcopy(actions)
-        self.is_terminal = self.simulator.check_for_episode_termination() is not None
+        self.is_terminal = self.simulator.winner is not None
 
-RESOURCES = 1000
+RESOURCES = 1500
 
 class MCTS:
     """
@@ -33,11 +33,14 @@ class MCTS:
     def __init__(self, player_id: int = 0, ):
         self.simulator = Connect4Env()
         self.simulator.reset()
+        self.player_id = player_id
         self.root = Node(simulator=self.simulator.clone(), actions=self.simulator.get_moves())
 
-    def get_action(self):
+    def get_action(self, env: Connect4Env):
         # The tree search itself
         iters = 0
+        self.simulator = env.clone()
+        self.root = Node(simulator=self.simulator.clone(), actions=self.simulator.get_moves())
         while iters < RESOURCES:
             node = self.select(self.root)
             result = self.rollout(node)
@@ -65,6 +68,8 @@ class MCTS:
             new_simulator.step(action)
             child_node = Node(simulator=new_simulator, actions=new_simulator.get_moves(), parent=node)
             node.children.append((action, child_node))
+        
+        return child_node
 
     def best_child(self, node: Node, c=1):
         best_child = None
@@ -91,12 +96,15 @@ class MCTS:
 
     def rollout(self, node: Node):
         self.simulator = node.simulator.clone()
-        while not self.simulator.check_for_episode_termination():
+        while self.simulator.winner is None:
             possible_moves = self.simulator.get_moves()
 
             action = random.choice(possible_moves) if possible_moves else None
             self.simulator.step(action)
         
         reward = {}
-        reward[self.simulator.current_player] = 1 if self.simulator.check_for_episode_termination() == self.simulator.current_player else 0
+        if self.simulator.winner == -1:
+            reward = {0: 0.5, 1: 0.5}
+        else:
+            reward = {self.simulator.winner: 1, 1 - self.simulator.winner: 0}
         return reward
