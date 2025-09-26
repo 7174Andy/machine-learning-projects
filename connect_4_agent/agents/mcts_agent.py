@@ -24,7 +24,7 @@ class Node:
         self.untried_actions = deepcopy(actions)
         self.is_terminal = self.simulator.winner is not None
 
-RESOURCES = 1000
+RESOURCES = 1500
 
 class MCTS:
     """
@@ -71,7 +71,7 @@ class MCTS:
         
         return child_node
 
-    def best_child(self, node: Node, c=1):
+    def best_child(self, node: Node, c=0.8):
         best_child = None
         best_action = None
         best_child_value = float("-inf")
@@ -137,3 +137,13 @@ class MCTS:
         # Otherwise, center bias
         order = sorted(possible_moves, key=lambda c: abs(c - (sim.width - 1)/2))
         return order[0]
+    
+    def root_q_stats(self):
+        """ Returns the Q values of the root node's children for analysis purposes. """
+        stats = []
+        for action, child in self.root.children:
+            q_value = child.num_wins / child.num_visits if child.num_visits > 0 else 0
+            stats.append((action, q_value, child.num_visits))
+        
+        stats.sort(key=lambda x: x[0])  # Sort by action (column)
+        return stats
