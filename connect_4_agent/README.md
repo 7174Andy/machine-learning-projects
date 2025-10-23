@@ -30,9 +30,9 @@ Three different agents are implemented:
 
 ## Installation Guide
 
-1.  Install the required libraries using pip:
+1.  Install the required libraries using uv:
     ```bash
-    pip install numpy gymnasium pandas matplotlib colorama
+    uv sync
     ```
 
 ## How to Run
@@ -41,15 +41,15 @@ You can run the different scripts from the `connect_4_agent` directory.
 
 - **Play against the AI:**
   ```bash
-  python connect4_against_ai.py
+  uv run connect4_against_ai.py
   ```
 
 - **Compare two AI agents:**
   ```bash
-  python compare_agents.py
+  uv run compare_agents.py
   ```
 
 - **Run a full match simulation and generate metrics:**
   ```bash
-  python connect4gym.py
+  uv run connect4gym.py
   ```

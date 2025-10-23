@@ -1,7 +1,6 @@
 from connect4_gym.env import Connect4Env
 from agents.minimax_agent import MiniMaxAgent
 from agents.mcts_agent import MCTS
-import numpy as np
 
 env = Connect4Env()
 env.reset()

@@ -24,11 +24,11 @@ The core components are:
 
 ## Installation Guide
 
-1.  Ensure you have Python 3.12 installed.
+1.  Ensure you have Python 3.12 and [uv](https://github.com/astral-sh/uv) installed.
 
-2.  Install the required libraries. You can use pip:
+2.  Install the dependencies:
     ```bash
-    pip install torch torchvision PySide6 numpy matplotlib
+    uv sync
     ```
 
 ## How to Run
@@ -36,7 +36,7 @@ The core components are:
 To run the digit recognition application, execute the `app.py` script from within the `cnn` directory:
 
 ```bash
-python app.py
+uv run app.py
 ```
 
 To explore the model training process, you can run the Jupyter notebook:

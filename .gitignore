@@ -199,3 +199,7 @@ cython_debug/
 # Remove metrics files
 episode_metrics.json
 episode_metrics.csv
+
+# uv locks
+.uv/
+uv.lock
