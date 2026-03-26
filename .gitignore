@@ -203,3 +203,9 @@ episode_metrics.csv
 # uv locks
 .uv/
 uv.lock
+
+# Videos
+*.mp4
+
+# Hydra outputs
+outputs/

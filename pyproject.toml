@@ -1,0 +1,17 @@
+[project]
+name = "machine-learning-projects"
+version = "0.1.0"
+description = "A collection of machine learning projects"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.4.3",
+]
+
+[tool.uv.workspace]
+members = [
+    "cnn",
+    "connect_4_agent",
+    "deep-q-learning",
+    "ppo_cart_pole",
+]
